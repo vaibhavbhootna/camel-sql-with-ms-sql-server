@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.xy.umss.com/"
+	xmlns:tns="http://ws.xy.umss.com/" elementFormDefault="qualified">
+
+
+	<xs:element name="getAllCars" type="tns:GetAllCars" />
+	<xs:element name="getAllCarsResponse" type="tns:GetAllCarsResponse" />
+	<xs:element name="getAllCarsFault" type="tns:PersonalDataFault" />
+
+	<xs:element name="getPersonData" type="tns:GetPersonData" />
+	<xs:element name="getPersonDataResponse" type="tns:GetPersonDataResponse" />
+	<xs:element name="getPersonDataFault" type="tns:PersonalDataFault" />
+	
+	<xs:element name="getMyCar" type="tns:GetMyCar" />
+	<xs:element name="getMyCarResponse" type="tns:GetMyCarResponse" />
+	<xs:element name="getMyCarFault" type="tns:PersonalDataFault" />
+
+	<xs:complexType name="GetPersonData">
+		<xs:sequence>
+			<xs:element name="msisdn">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer" />
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="GetPersonDataResponse">
+		<xs:sequence>
+			<xs:element name="responseHeader" type="tns:ResponseHeader" />
+			<xs:element name="responseBody" type="tns:ResponseBody" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="GetAllCars">
+		<xs:sequence>
+			<xs:element name="msisdn">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="GetAllCarsResponse">
+		<xs:sequence>
+			<xs:element name="responseHeader" type="tns:ResponseHeader" />
+			<xs:element name="responseBody" type="tns:ResponseBody" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	
+		<xs:complexType name="GetMyCar">
+		<xs:sequence>
+			<xs:element name="msisdn">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="GetMyCarResponse">
+		<xs:sequence>
+			<xs:element name="responseHeader" type="tns:ResponseHeader" />
+			<xs:element name="responseBody" type="tns:ResponseBody" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	
+
+	<xs:complexType name="ResponseHeader">
+		<xs:sequence>
+			<xs:element name="code" type="xs:int" />
+			<xs:element name="description" type="xs:normalizedString" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ResponseBody">
+		<xs:sequence>
+			<xs:element name="persons" type="tns:Persons" minOccurs="0" />
+			<xs:element name="cars" type="tns:Cars" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="Persons">
+		<xs:sequence>
+			<xs:element name="person" type="tns:Person" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Cars">
+		<xs:sequence>
+			<xs:element name="car" type="tns:Car" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Person">
+		<xs:sequence>
+		<xs:element name="idPerson" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="firstName">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="lastName">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="address" type="tns:Address" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="car" type="tns:Car" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Address">
+		<xs:sequence>
+			<xs:element name="street">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="city">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="country">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="Car">
+		<xs:sequence>
+			<xs:element name="idCar">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="model">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="brand">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="color" type="tns:Color" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Color">
+		<xs:sequence>
+			<xs:element name="primary">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="secondary">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100" />
+						<xs:whiteSpace value="collapse" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="PersonalDataFault">
+		<xs:sequence>
+			<xs:element name="responseHeader" type="tns:ResponseHeader" />
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

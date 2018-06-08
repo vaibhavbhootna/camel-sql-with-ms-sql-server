@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+	   http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+
+	<cxf:cxfEndpoint name="myPersonalDataServiceCXF" address="/myPersonalDataservice" endpointName="cs:MyPersonalDataServicePort"
+		xmlns:cs="http://ws.xy.umss.com/v1" serviceName="cs:MyPersonalDataService" wsdlURL="wsdl/my-personal-data-service.wsdl" />
+
+	<camel:camelContext>
+
+		<camel:propertyPlaceholder id="placeholder" location="classpath:sql.properties"></camel:propertyPlaceholder>
+
+		<camel:dataFormats>
+			<camel:jaxb id="myPersonalDataJaxb" contextPath="com.umss.xy.ws" />
+		</camel:dataFormats>
+
+		<camel:route id="myPersonalData-service-main-route">
+			<camel:from uri="cxf:bean:myPersonalDataServiceCXF?dataFormat=PAYLOAD&amp;bus=#secure-bus" />
+			<camel:unmarshal ref="myPersonalDataJaxb" />
+			<camel:log message="Request for operation : ${headers.operationName}" loggingLevel="INFO"/>
+			<camel:choice>
+				<camel:when>
+					<camel:simple>${headers.operationName} == 'getAllCars'</camel:simple>
+					<camel:to uri="direct:getAllCars"></camel:to>
+				</camel:when>
+				<camel:when>
+					<camel:simple>${headers.operationName} == 'getMyCar'</camel:simple>
+					<camel:to uri="direct:getMyCar" />
+				</camel:when>
+				<camel:when>
+					<camel:simple>${headers.operationName} == 'getPerson'</camel:simple>
+					<camel:to uri="direct:getPersonData" />
+				</camel:when>
+			</camel:choice>
+			<camel:marshal ref="myPersonalDataJaxb" />
+		</camel:route>
+
+		<camel:route id="getAllCars-route">
+			<camel:from uri="direct:getAllCars" />
+			<camel:process ref="getAllCarsRequestProcessor" />
+			<camel:to uri="sql:{{sql.getAllCars}}" />
+			<camel:process ref="getAllCarsResponseProcessor"></camel:process>
+		</camel:route>
+
+		<camel:route id="getMyCar-route">
+			<camel:from uri="direct:getMyCar" />
+			<camel:process ref="getMyCarRequestProcessor" />
+			<camel:to uri="sql:{{sql.getMyCar}}"></camel:to>
+			<camel:process ref="getMyCarResponseProcessor" />
+		</camel:route>
+
+		<camel:route id="getPersonData-route">
+			<camel:from uri="direct:getPersonData" />
+			<camel:process ref="getPersonDataRequestProcessor" />
+			<camel:to uri="sql:{{sql.getPersonData}}"></camel:to>
+			<camel:process ref="getPersonDataResponseProcessor" />
+		</camel:route>
+
+	</camel:camelContext>
+
+	<bean id="getAllCarsRequestProcessor" class="com.myPersonalData.service.processor.GetAllCarsRequestProcessor" />
+	<bean id="getAllCarsResponseProcessor" class="com.myPersonalData.service.processor.GetAllCarsResponseProcessor" />
+
+	<bean id="getMyCarRequestProcessor" class="com.myPersonalData.service.processor.GetMyCarRequestProcessor" />
+	<bean id="getMyCarResponseProcessor" class="com.myPersonalData.service.processor.GetMyCarResponseProcessor" />
+
+	<bean id="getPersonDataRequestProcessor" class="com.myPersonalData.service.processor.GetPersonDataRequestProcessor" />
+	<bean id="getPersonDataResponseProcessor" class="com.myPersonalData.service.processor.GetPersonDataResponseProcessor" />
+
+
+	<!-- <bean id="oracleDataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+		<property name="URL" value="jdbc:oracle:thin:@//localhost:1521/XE" />
+		<property name="user" value="system" />
+		<property name="password" value="admin" />
+	</bean> -->
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="net.sourceforge.jtds.jdbc.Driver" />
+		<property name="url" value="jdbc:jtds:sqlserver://mypersonaldata.ce7s5cfflulk.us-east-2.rds.amazonaws.com:1433;databaseName=mypersonaldata" />
+		<property name="username" value="dbUser" />
+		<property name="password" value="password123" />
+	</bean>
+
+	<bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+
+</beans>

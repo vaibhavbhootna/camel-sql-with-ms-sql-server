@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.xy.umss.com/v1"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MyPersonalData-service"
+	xmlns:cs="http://ws.xy.umss.com/" targetNamespace="http://ws.xy.umss.com/v1">
+
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import namespace="http://ws.xy.umss.com/" schemaLocation="schemas/my-personal-data-schema.xsd"></xsd:import>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="getAllCars">
+		<wsdl:part name="getAllCars" element="cs:getAllCars"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getAllCarsResponse">
+		<wsdl:part name="getAllCarsResponse" element="cs:getAllCarsResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getAllCarsFault">
+		<wsdl:part name="getAllCarsFault" element="cs:getAllCarsFault"></wsdl:part>
+	</wsdl:message>
+	
+	<wsdl:message name="getMyCar">
+		<wsdl:part name="getMyCar" element="cs:getMyCar"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getMyCarResponse">
+		<wsdl:part name="getMyCarResponse" element="cs:getMyCarResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getMyCarFault">
+		<wsdl:part name="getMyCarFault" element="cs:getMyCarFault"></wsdl:part>
+	</wsdl:message>
+	
+	
+	
+	<wsdl:message name="getPersonData">
+		<wsdl:part name="getPersonData" element="cs:getPersonData"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getPersonDataResponse">
+		<wsdl:part name="getPersonDataResponse" element="cs:getPersonDataResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="getPersonDataFault">
+		<wsdl:part name="getPersonDataFault" element="cs:getPersonDataFault"></wsdl:part>
+	</wsdl:message>
+	
+
+	<wsdl:portType name="MyPersonalDataServicePort">
+		<wsdl:operation name="getAllCars">
+			<wsdl:input message="tns:getAllCars" name="getAllCars" />
+			<wsdl:output message="tns:getAllCarsResponse" name="getAllCarsResponse" />
+			<wsdl:fault message="tns:getAllCarsFault" name="getAllCarsFault"></wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPerson">
+			<wsdl:input message="tns:getPersonData" name="getPersonData" />
+			<wsdl:output message="tns:getPersonDataResponse" name="getPersonDataResponse" />
+			<wsdl:fault message="tns:getPersonDataFault" name="getPersonDataFault"></wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getMyCar">
+			<wsdl:input message="tns:getMyCar" name="getMyCar" />
+			<wsdl:output message="tns:getMyCarResponse" name="getMyCarResponse" />
+			<wsdl:fault message="tns:getMyCarFault" name="getMyCarFault"></wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="MyPersonalDataServiceBinding" type="tns:MyPersonalDataServicePort">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getAllCars">
+			<soap:operation soapAction="getAllCars" style="document" />
+			<wsdl:input name="getAllCars">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getAllCarsResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getAllCarsFault">
+				<soap:fault name="getAllCarsFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPerson">
+			<soap:operation soapAction="getPerson" style="document" />
+			<wsdl:input name="getPersonData">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getPersonDataResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getPersonDataFault">
+				<soap:fault name="getPersonDataFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getMyCar">
+			<soap:operation soapAction="getMyCar" style="document" />
+			<wsdl:input name="getMyCar">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getMyCarResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="getMyCarFault">
+				<soap:fault name="getMyCarFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	
+	<wsdl:service name="MyPersonalDataService">
+		<wsdl:port name="MyPersonalDataServicePort" binding="tns:MyPersonalDataServiceBinding">
+			<soap:address location="http://0.0.0.0:8181/cxf/myPersonalDataservice/v1"/>
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>
